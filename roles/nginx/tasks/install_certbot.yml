@@ -1,0 +1,10 @@
+---
+- name: Install snapd
+  ansible.builtin.apt:
+    name: snapd
+    update_cache: true
+
+- name: Install certbot
+  community.general.snap:
+    name: certbot
+    classic: true

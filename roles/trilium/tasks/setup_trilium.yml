@@ -1,0 +1,45 @@
+---
+- name: Create trilium group
+  ansible.builtin.group:
+    name: "{{ trilium_group }}"
+    state: present
+  register: trilium_group_out
+
+- name: Create trilium user with a home directory
+  ansible.builtin.user:
+    name: "{{ trilium_user }}"
+    create_home: true
+    password: "!"
+    group: "{{ trilium_group }}"
+  register: trilium_user_out
+
+- name: Create Trilium data directory
+  ansible.builtin.file:
+    path: "{{ trilium_data_directory }}"
+    state: directory
+    mode: "0750"
+    owner: "{{ trilium_user }}"
+    group: "{{ trilium_group }}"
+
+- name: Create a network for Trilium
+  community.docker.docker_network:
+    name: trilium
+
+- name: Run Trilium container
+  community.docker.docker_container:
+    name: trilium
+    image: "{{ trilium_image }}:{{ trilium_version }}"
+    state: started
+    restart_policy: always
+    env:
+      TRILIUM_NETWORK_TRUSTEDREVERSEPROXY: "{{ trilium_network_trustedreverseproxy }}"
+      USER_UID: "{{ trilium_user_out.uid | string }}"
+      USER_GID: "{{ trilium_group_out.gid | string }}"
+    ports:
+      - "{{ trilium_host_bind }}:{{ trilium_host_port }}:8080"
+    volumes:
+      - "{{ trilium_data_directory }}:/home/node/trilium-data:rw"
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - name: trilium

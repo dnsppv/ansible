@@ -1,0 +1,9 @@
+# Playbook for installing Trilium
+
+- name: Install Trilium
+  hosts: trilium
+  become: true
+  roles:
+    - geerlingguy.docker
+    - trilium
+    - nginx

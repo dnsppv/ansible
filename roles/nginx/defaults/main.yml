@@ -1,0 +1,14 @@
+---
+nginx_server_name: www.example.com
+nginx_server_cert_directory: /etc/letsencrypt
+nginx_config_directory: /etc/nginx/conf.d
+nginx_log_directory: /var/log/nginx
+nginx_user: root
+nginx_group: root
+nginx_image: nginx
+nginx_version: 1.29.3-alpine
+nginx_container_http_port: "8080"
+nginx_container_https_port: "8443"
+nginx_host_http_port: "80"
+nginx_host_https_port: "443"
+nginx_host_bind: 0.0.0.0

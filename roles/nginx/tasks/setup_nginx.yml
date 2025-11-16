@@ -1,0 +1,43 @@
+---
+- name: Create Nginx config directory
+  ansible.builtin.file:
+    path: "{{ nginx_config_directory }}"
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+
+- name: Create Nginx log directory
+  ansible.builtin.file:
+    path: "{{ nginx_log_directory }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_group }}"
+
+- name: Template Nginx default config
+  ansible.builtin.template:
+    src: default.conf.j2
+    dest: "{{ nginx_config_directory }}/default.conf"
+    mode: "0644"
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_group }}"
+  notify: Restart Nginx container
+
+- name: Run Nginx container
+  community.docker.docker_container:
+    name: nginx
+    image: "{{ nginx_image }}:{{ nginx_version }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ nginx_host_bind }}:{{ nginx_host_http_port }}:{{ nginx_container_http_port }}"
+      - "{{ nginx_host_bind }}:{{ nginx_host_https_port }}:{{ nginx_container_https_port }}"
+    volumes:
+      - "{{ nginx_config_directory }}:{{ nginx_config_directory }}:ro"
+      - "{{ nginx_log_directory }}:{{ nginx_log_directory }}:rw"
+      - "{{ nginx_server_cert_directory }}:{{ nginx_server_cert_directory }}:ro"
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - name: trilium

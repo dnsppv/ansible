@@ -1,0 +1,9 @@
+---
+trilium_image: triliumnext/trilium
+trilium_version: v0.99.3
+trilium_user: trilium
+trilium_group: trilium
+trilium_data_directory: /home/{{ trilium_user }}/trilium-data
+trilium_host_bind: 127.0.0.1
+trilium_host_port: "8080"
+trilium_network_trustedreverseproxy: uniquelocal

@@ -1,0 +1,4 @@
+---
+- name: Install Trilium
+  ansible.builtin.include_tasks:
+    file: setup_trilium.yml
