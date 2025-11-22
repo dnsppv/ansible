@@ -37,3 +37,10 @@
     service: https
     state: enabled
     permanent: "{{ permanent | default(false) }}"
+
+- name: Assign docker0 interface to docker zone
+  ansible.posix.firewalld:
+    zone: docker
+    interface: docker0
+    state: enabled
+    permanent: "{{ permanent | default(false) }}"
