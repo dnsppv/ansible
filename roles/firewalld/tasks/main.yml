@@ -1,0 +1,39 @@
+---
+- name: Install firewalld
+  ansible.builtin.apt:
+    name: firewalld
+    update_cache: true
+
+- name: Stop service ufw
+  ansible.builtin.systemd:
+    name: ufw
+    state: stopped
+    enabled: false
+
+- name: Assign eth interface to public zone
+  ansible.posix.firewalld:
+    zone: public
+    interface: eth0
+    state: enabled
+    permanent: "{{ permanent | default(false) }}"
+
+- name: Enable ssh service
+  ansible.posix.firewalld:
+    zone: public
+    service: ssh
+    state: enabled
+    permanent: "{{ permanent | default(false) }}"
+
+- name: Enable http service
+  ansible.posix.firewalld:
+    zone: public
+    service: http
+    state: enabled
+    permanent: "{{ permanent | default(false) }}"
+
+- name: Enable https service
+  ansible.posix.firewalld:
+    zone: public
+    service: https
+    state: enabled
+    permanent: "{{ permanent | default(false) }}"
