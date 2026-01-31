@@ -37,6 +37,7 @@
       - "{{ nginx_config_directory }}:{{ nginx_config_directory }}:ro"
       - "{{ nginx_log_directory }}:{{ nginx_log_directory }}:rw"
       - "{{ nginx_server_cert_directory }}:{{ nginx_server_cert_directory }}:ro"
+      - "{{ nginx_certbot_directory }}:{{ nginx_certbot_directory }}:ro"
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     networks:

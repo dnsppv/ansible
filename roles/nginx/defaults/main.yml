@@ -2,6 +2,8 @@
 nginx_server_name: www.example.com
 nginx_server_cert_directory: /etc/letsencrypt
 nginx_config_directory: /etc/nginx/conf.d
+nginx_certbot_directory: /var/www/certbot
+nginx_acme_challenge_directory: "{{ nginx_certbot_directory }}/.well-known/acme-challenge"
 nginx_log_directory: /var/log/nginx
 nginx_user: root
 nginx_group: root

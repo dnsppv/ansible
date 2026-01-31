@@ -8,3 +8,11 @@
   community.general.snap:
     name: certbot
     classic: true
+
+- name: Create acme-challenge directory
+  ansible.builtin.file:
+    path: "{{ nginx_acme_challenge_directory }}"
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
